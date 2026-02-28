@@ -13,6 +13,7 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
 
@@ -20,13 +21,20 @@ jobs:
         with:
           node-version: 18
 
-      - run: npm ci
-      - run: npm run build
+      - name: Install dependencies
+        run: |
+          cd frontend
+          npm ci
+
+      - name: Build project
+        run: |
+          cd frontend
+          npm run build
 
       - uses: actions/configure-pages@v4
 
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: ./dist
+          path: frontend/dist
 
       - uses: actions/deploy-pages@v4
