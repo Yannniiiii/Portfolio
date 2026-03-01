@@ -10,31 +10,44 @@ export default function Navbar({ dark, setDark }) {
     { id: "home", label: "Home" },
     { id: "about", label: "About" },
     { id: "projects", label: "Projects" },
-    { id: "contact", label: "Contacts" },
+    { id: "contact", label: "Contact" },
   ];
 
   /* ===============================
-     Active Section Observer
+     SCROLL SPY (Professional Way)
   =============================== */
   useEffect(() => {
     const sections = document.querySelectorAll("section");
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActive(entry.target.id);
-          }
-        });
-      },
-      { threshold: 0.6 }
-    );
+    const handleScroll = () => {
+      let currentSection = "";
 
-    sections.forEach((section) => observer.observe(section));
+      sections.forEach((section) => {
+        const rect = section.getBoundingClientRect();
 
-    return () => {
-      sections.forEach((section) => observer.unobserve(section));
+        // 100px from top = activation line
+        if (rect.top <= 100 && rect.bottom >= 100) {
+          currentSection = section.id;
+        }
+      });
+
+      // Special case for bottom of page (Contact section fix)
+      if (
+        window.innerHeight + window.scrollY >=
+        document.body.offsetHeight - 5
+      ) {
+        currentSection = sections[sections.length - 1].id;
+      }
+
+      if (currentSection) {
+        setActive(currentSection);
+      }
     };
+
+    window.addEventListener("scroll", handleScroll);
+    handleScroll(); // run once on mount
+
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   /* ===============================
@@ -59,7 +72,9 @@ export default function Navbar({ dark, setDark }) {
   /* ===============================
      Smooth Scroll
   =============================== */
-  const handleScroll = (id) => {
+  const handleScrollClick = (id) => {
+    setActive(id); // instant underline
+
     const section = document.getElementById(id);
 
     if (section) {
@@ -97,7 +112,7 @@ export default function Navbar({ dark, setDark }) {
             {links.map((link) => (
               <button
                 key={link.id}
-                onClick={() => handleScroll(link.id)}
+                onClick={() => handleScrollClick(link.id)}
                 className={`relative pb-1 transition-colors duration-300 ${
                   active === link.id
                     ? "text-yellow-300"
@@ -142,19 +157,15 @@ export default function Navbar({ dark, setDark }) {
         </div>
       </nav>
 
-      {/* ===============================
-          Background Blur Overlay
-      =============================== */}
+      {/* Background Overlay */}
       {menuOpen && (
         <div
-          className="fixed inset-0 z-40 backdrop-blur-md bg-black/30 md:hidden transition-opacity duration-300"
+          className="fixed inset-0 z-40 backdrop-blur-md bg-black/30 md:hidden"
           onClick={() => setMenuOpen(false)}
         />
       )}
 
-      {/* ===============================
-          Floating Mobile Menu Card
-      =============================== */}
+      {/* Mobile Menu */}
       {menuOpen && (
         <div className="md:hidden fixed top-20 left-0 w-full z-50 px-4">
           <div
@@ -168,13 +179,12 @@ export default function Navbar({ dark, setDark }) {
               px-6 py-6
               flex flex-col gap-6
               text-white text-lg font-medium
-              animate-[fadeIn_.25s_ease-in-out]
             "
           >
             {links.map((link) => (
               <button
                 key={link.id}
-                onClick={() => handleScroll(link.id)}
+                onClick={() => handleScrollClick(link.id)}
                 className={`text-left transition-colors duration-300 ${
                   active === link.id
                     ? "text-yellow-300"

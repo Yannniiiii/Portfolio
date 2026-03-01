@@ -35,6 +35,13 @@ export default function Hero() {
     return () => clearTimeout(timeout);
   }, []);
 
+  const scrollToSection = (id) => {
+    const section = document.getElementById(id);
+    if (section) {
+      section.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   return (
     <div className="w-full px-6 md:px-12">
       {/* Glass Card */}
@@ -73,11 +80,17 @@ export default function Hero() {
           </p>
 
           <div className="mt-10 flex flex-col sm:flex-row gap-6 justify-center md:justify-start">
-            <button className="px-8 py-4 rounded-xl bg-white text-purple-700 font-semibold hover:scale-105 transition shadow-lg">
+            <button
+              onClick={() => scrollToSection("projects")}
+              className="px-8 py-4 rounded-xl bg-white text-purple-700 font-semibold hover:scale-105 transition shadow-lg"
+            >
               View Projects
             </button>
 
-            <button className="px-8 py-4 rounded-xl border border-white/50 text-white hover:bg-white/20 transition">
+            <button
+              onClick={() => scrollToSection("contact")}
+              className="px-8 py-4 rounded-xl border border-white/50 text-white hover:bg-white/20 transition"
+            >
               Contact Me
             </button>
           </div>
