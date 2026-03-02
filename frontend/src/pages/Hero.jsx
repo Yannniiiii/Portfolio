@@ -75,8 +75,7 @@ export default function Hero() {
           </h2>
 
           <p className="text-white/80 mt-6 max-w-xl mx-auto md:mx-0">
-            I build modern, scalable, and visually stunning web applications
-            with premium UI/UX design.
+           I design and develop scalable software and web applications focused on performance, maintainability, and user-centered design.
           </p>
 
           <div className="mt-10 flex flex-col sm:flex-row gap-6 justify-center md:justify-start">
