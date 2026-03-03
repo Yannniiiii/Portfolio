@@ -6,6 +6,7 @@ import {
   SiNodedotjs,
   SiExpress,
   SiTailwindcss,
+  SiVite,
 } from "react-icons/si";
 
 export default function About() {
@@ -17,6 +18,7 @@ export default function About() {
         { name: "React.js", icon: <SiReact size={20} /> },
         { name: "JavaScript", icon: <SiJavascript size={20} /> },
         { name: "Tailwind CSS", icon: <SiTailwindcss size={20} /> },
+        { name: "Vite", icon: <SiVite size={20} /> },
       ],
     },
     {
