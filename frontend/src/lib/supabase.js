@@ -1,6 +1,13 @@
-import { createClient } from '@supabase/supabase-js';
+// src/lib/api.js
+const apiUrl = import.meta.env.VITE_API_URL; // Must be set on Vercel
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseKey = import.meta.env.VITE_SUPABASE_KEY;
-
-export const supabase = createClient(supabaseUrl, supabaseKey);
+export async function fetchBackend(endpoint) {
+  try {
+    const res = await fetch(`${apiUrl}/${endpoint}`);
+    if (!res.ok) throw new Error(`Failed to fetch: ${res.status}`);
+    return await res.json();
+  } catch (err) {
+    console.error("Failed to fetch from backend:", err);
+    throw err;
+  }
+}

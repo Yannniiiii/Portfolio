@@ -1,8 +1,13 @@
-// frontend/src/lib/api.js
-const apiUrl = import.meta.env.VITE_API_URL;
+// src/lib/api.js
+const apiUrl = import.meta.env.VITE_API_URL; // Must be set on Vercel
 
 export async function fetchBackend(endpoint) {
-  const response = await fetch(`${apiUrl}/${endpoint}`); // no port needed in deployed version
-  if (!response.ok) throw new Error("Failed to fetch from backend");
-  return await response.json();
+  try {
+    const res = await fetch(`${apiUrl}/${endpoint}`);
+    if (!res.ok) throw new Error(`Failed to fetch: ${res.status}`);
+    return await res.json();
+  } catch (err) {
+    console.error("Failed to fetch from backend:", err);
+    throw err;
+  }
 }
