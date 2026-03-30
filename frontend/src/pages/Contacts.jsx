@@ -3,7 +3,7 @@ import { Mail } from "lucide-react";
 import emailjs from "@emailjs/browser";
 
 export default function Contact() {
-  const form = useRef();
+  const form = useRef(null);
   const [loading, setLoading] = useState(false);
 
   const sendEmail = async (e) => {
@@ -11,19 +11,17 @@ export default function Contact() {
     setLoading(true);
 
     try {
-      const result = await emailjs.sendForm(
+      await emailjs.sendForm(
         import.meta.env.VITE_EMAILJS_SERVICE_ID,
         import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
         form.current,
         import.meta.env.VITE_EMAILJS_PUBLIC_KEY
       );
 
-      console.log("SUCCESS:", result.text);
       alert("✅ Message sent successfully!");
       form.current.reset();
     } catch (error) {
-      console.error("EMAIL ERROR:", error);
-      alert("❌ Failed to send message. Check EmailJS setup.");
+      alert(`❌ ${error?.text || "Failed to send message. Please try again."}`);
     } finally {
       setLoading(false);
     }
@@ -32,6 +30,7 @@ export default function Contact() {
   return (
     <section className="py-24 px-6">
       <div className="max-w-3xl mx-auto text-center">
+        {/* Heading */}
         <h2 className="text-4xl font-bold mb-6 text-white">
           Contact{" "}
           <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
@@ -43,6 +42,7 @@ export default function Contact() {
           Let’s build something amazing together.
         </p>
 
+        {/* Contact Card */}
         <div className="backdrop-blur-lg bg-white/10 dark:bg-white/5 border border-white/20 rounded-2xl p-10 transition-transform duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/30">
           <div className="flex flex-col items-center gap-6">
             <div className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 p-4 rounded-full">
@@ -81,7 +81,7 @@ export default function Contact() {
                 rows="3"
                 onInput={(e) => {
                   e.target.style.height = "auto";
-                  e.target.style.height = e.target.scrollHeight + "px";
+                  e.target.style.height = `${e.target.scrollHeight}px`;
                 }}
                 className="w-full p-3 rounded-lg bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none overflow-hidden"
               />
